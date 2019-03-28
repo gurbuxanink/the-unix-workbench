@@ -1100,6 +1100,113 @@ git add -A
 git commit -m "resolved conflict"
 ```
 
+In an organization, when a team is working on a project, the branches will exist in different directories.  This method can be used with `git clone` command.  Let's create a new directory and initialize it with `git init`. 
+
+```bash
+mkdir maindoc
+cd maindoc
+git init		
+echo 'The woods are lovely, dark and deep' > frost.txt
+echo 'But I have promises to keep' >> frost.txt
+cat frost.txt
+```
+
+```
+## Initialized empty Git repository in ../maindoc/.git/
+## The woods are lovely, dark and deep
+## But I have promises to keep
+```
+
+Let us commit this file to git.  
+
+```bash
+git add frost.txt
+git commit -m 'Initial lines'
+```
+
+```
+[master (root-commit) c32e251] Initial lines
+ 1 file changed, 2 insertions(+)
+ create mode 100644 frost.txt
+```
+
+Now let us go to another directory where we clone this directory.  
+
+```bash
+cd ..
+mkdir mydoc
+cd mydoc
+git clone ../maindoc
+cd maindoc
+cat frost.txt
+```
+
+```
+Cloning into 'maindoc'...
+done.
+The woods are lovely, dark and deep
+But I have promises to keep
+```
+
+Now we will add a two more lines and commit them.  
+
+```bash
+echo 'And miles to go before I sleep' >> frost.txt
+echo 'And miles to go before I sleep' >> frost.txt
+cat frost.txt
+git add -u
+git commit -m "Added two more lines"
+```
+
+```
+The woods are lovely, dark and deep
+But I have promises to keep
+And miles to go before I sleep
+And miles to go before I sleep
+
+[master 4a473cc] Added two more lines
+ 1 file changed, 2 insertions(+)
+```
+
+Let us go back to the main directory.  Here the file is not yet updated. 
+
+```bash
+cd ../../maindoc
+cat forst.txt
+```
+
+```
+The woods are lovely, dark and deep
+But I have promises to keep
+```
+
+Now pull the changes made in `mydoc` directory and verify that these changes are updated in the `maindoc`.  
+
+```bash
+git pull ../mydoc/maindoc/
+git status
+cat frost.txt
+```
+
+```
+From ../mydoc/maindoc
+ * branch            HEAD       -> FETCH_HEAD
+Updating c32e251..4a473cc
+Fast-forward
+ frost.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+On branch master
+nothing to commit, working tree clean
+
+The woods are lovely, dark and deep
+But I have promises to keep
+And miles to go before I sleep
+And miles to go before I sleep
+```
+
+This way, many members of a team can contibute to a project.  Their contributions can be pulled into the main branch.  
+
 You're now familiar with this basics of Git! If you want to go into further
 depth with your study of Git I highly recommend the free and open source book
 [Pro Git](https://git-scm.com/book/).
